@@ -6,14 +6,14 @@ interface Doce {
   nome: string;
   tipo: string;
   preco: number;
-  emEstoque: number;
+  quantidade: number;
 }
 
 function Doces() {
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("");
   const [preco, setPreco] = useState("");
-  const [emEstoque, setEmEstoque] = useState("1");
+  const [quantidade, setQuantidade] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [doces, setDoces] = useState<Doce[]>([]);
 
@@ -45,7 +45,7 @@ function Doces() {
           nome,
           tipo,
           preco: parseFloat(preco),
-          emEstoque: parseInt(emEstoque),
+          quantidade: parseInt(quantidade),
         }),
       });
 
@@ -55,7 +55,7 @@ function Doces() {
         setNome("");
         setTipo("");
         setPreco("");
-        setEmEstoque("1");
+        setQuantidade("");
 
         const docesAtualizados = await fetch("http://localhost:8000/doces");
         const dados = await docesAtualizados.json();
@@ -73,7 +73,7 @@ function Doces() {
     <>
       <header>
         <div className="logo-titulo">
-          <img src="SUA_IMAGEM_AQUI" alt="Logo" className="logo" />
+          <img src="./logo.png" alt="Logo" className="logo" />
           <h1>Cadastro de Doces</h1>
         </div>
         <nav>
@@ -92,15 +92,7 @@ function Doces() {
             <input type="text" placeholder="Nome" value={nome} onChange={e => setNome(e.target.value)} required />
             <input type="text" placeholder="Tipo (ex: Bolo, Brigadeiro)" value={tipo} onChange={e => setTipo(e.target.value)} required />
             <input type="number" placeholder="Preço" value={preco} onChange={e => setPreco(e.target.value)} required />
-            
-            <label>
-              Em estoque:
-              <select value={emEstoque} onChange={e => setEmEstoque(e.target.value)}>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
-              </select>
-            </label>
-
+            <input type="number" placeholder="Quantidade em estoque" value={quantidade} onChange={e => setQuantidade(e.target.value)} required />
             <input type="submit" value="Adicionar Doce" />
           </form>
         </div>
@@ -109,8 +101,8 @@ function Doces() {
           {doces.map(doce => (
             <div key={doce.id} className="doce-container">
               <div><strong>{doce.nome}</strong> ({doce.tipo})</div>
-              <div>💰 R$ {doce.preco.toFixed(2)}</div>
-              <div>Em estoque: {doce.emEstoque === 1 ? "✅" : "❌"}</div>
+              <div>💰 R$ {Number(doce.preco).toFixed(2)}</div>
+              <div>📦 Quantidade em estoque: {doce.quantidade}</div>
             </div>
           ))}
         </div>
